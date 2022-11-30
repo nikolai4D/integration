@@ -8,7 +8,8 @@ export default class extends AbstractView {
     this.setTitle("Home");
   }
 
-    graphQLQuery = async (query = {}) => {
+
+  graphQLQuery = async (query = {})=> {
     {
       let response
       try {
@@ -19,21 +20,21 @@ export default class extends AbstractView {
           },
           body: JSON.stringify(query),
         });
-        if(!response.ok){
-            throw new Error(`HTTP error ${response.status}`)
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`)
         }
       } catch (error) {
         console.log(error);
       }
       return await response.json();
     }
-  };
+  }
 
-  bindScript() {
+  bindScript = ()=> {
     document
       .getElementById("submit")
-      .addEventListener("click", async function () {
-        let response = await this.graphQLQuery;
+      .addEventListener("click", async ()=> {
+        let response = await this.graphQLQuery()
         console.log("status from server response: ", response.status);
         console.log(response)
 
@@ -61,3 +62,24 @@ export default class extends AbstractView {
     element.querySelector("input").addEventListener("click", {}); */
   }
 }
+
+  // async function  graphQLQuery(query = {}) {
+  //   {
+  //     let response
+  //     try {
+  //       response = await fetch(`/graphql`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(query),
+  //       });
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error ${response.status}`)
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //     return await response.json();
+  //   }
+  // }
