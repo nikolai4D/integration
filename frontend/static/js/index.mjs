@@ -15,7 +15,7 @@ const getParams = match =>
     } ) );
 };
 
-const navigateTo = url =>
+export const navigateTo = url =>
 {
     history.pushState( null, null, url );
     router();

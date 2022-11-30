@@ -1,7 +1,8 @@
+const getNodes = require( "./db" );
+
 const express = require( "express" );
 const path = require( "path" );
-const axios = require( "axios" );
-const router = express.Router();
+// const router = express.Router();
 
 const app = express();
 
@@ -18,12 +19,10 @@ app.post( "/login", ( req, res, next ) =>
     res.send( "POST request to the homepage" );
 } );
 
-router.post( "/db", async function ( req, res, next )
+app.post( "/db", async function ( req, res, next )
 {
     let dbResponse = await getNodes();
     res.send( dbResponse );
 } );
 
 app.listen( process.env.PORT || 3060, () => console.log( "Server running..." ) );
-
-module.exports = router;

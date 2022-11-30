@@ -54,7 +54,7 @@ let body = {
 
 async function getNodes ()
 {
-
+console.log( "getNodes" );
     let response = await apiCallPost( body, url );
     return {
         status: response.status,

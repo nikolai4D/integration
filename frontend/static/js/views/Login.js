@@ -1,5 +1,8 @@
 import AbstractView from "./AbstractView.js";
 
+import { navigateTo } from "../index.mjs";
+
+
 // class Login extends AbstractView
 export default class extends AbstractView
 {
@@ -7,9 +10,9 @@ export default class extends AbstractView
     {
         super( params );
         this.setTitle( "Login" );
+        this.mode = "Register";
     }
-
-    submitHandler =  e =>
+    submitHandler = e =>
     {
         e.preventDefault();
         const email = document.getElementById( "email" ).value;
@@ -47,8 +50,10 @@ export default class extends AbstractView
             } ).then( data =>
             {
                 //SUCCESSFUL REQUEST & USER IS AUTHENTICATED
+                data.isAuthorized = true;
                 //LOGIN USER
                 //REDIRECT USER TO TODOS PAGE
+                navigateTo( "/todos" );
                 console.log( data );
             } ).catch( err =>
             {
@@ -58,20 +63,49 @@ export default class extends AbstractView
 
     bindScript ()
     {
-        document.getElementById( "login" ).addEventListener( "click", this.submitHandler );
+        document.getElementById( "actionBtn" ).addEventListener( "click", this.submitHandler );
+        document.getElementById( "modeSwitch" ).addEventListener( "click", this.modeSwitch );
     }
+    // mode = "Register";
+    modeSwitch = () =>
+    {
+        //login/register screen variables
+        let switchBtn = document.getElementById( "modeSwitch" );
+        let title = document.getElementById( "title" );
+        let actionBtn = document.getElementById( "actionBtn" );
+        if ( this.mode === "Register" )
+        {
+            //we switched to login mode
+            this.mode = "Login";
+            switchBtn.innerHTML = `Switch to ${ this.mode }`;
+
+            title.innerText = "Register";
+            actionBtn.innerText = "Register";
+        }
+        else if ( this.mode === "Login" )
+        {
+            //we switched to register mode
+            this.mode = "Register";
+            switchBtn.innerHTML = `Switch to ${ this.mode }`;
+
+            title.innerText = "Login";
+            actionBtn.innerText = "Login";
+        }
+        // this.mode = mode;
+    };
 
     async getHtml ()
     {
         return `
             <div>
-                <h1>Login</h1>
+                <h1 id="title">Login</h1>
                 <form>
                 <label for="email">Email:</label>
                 <input type="email" id="email" placeholder="example@example.com" required>
                 <label for="password">Password:</label>
                 <input type="password" id="password" placeholder="*********" required>
-                <button id="login" type="submit">Login</button>
+                <button id="modeSwitch" type="button">Switch to ${ this.mode }</button>
+                <button id="actionBtn" type="submit">Login</button>
                 </form>
             </div>
             `;
