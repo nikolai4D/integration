@@ -11,4 +11,18 @@
 a {
   color: #ffff;
   font-size: 24px;
+  list-style-type: none;
 }
+
+a:hover {
+  color: rgb(168, 168, 168);
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 90vh;
+    flex-direction: column;
+  }
