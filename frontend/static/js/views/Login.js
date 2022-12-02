@@ -1,7 +1,5 @@
 import AbstractView from "./AbstractView.js";
-
 import { navigateTo } from "../index.mjs";
-
 
 // class Login extends AbstractView
 export default class extends AbstractView
@@ -12,11 +10,13 @@ export default class extends AbstractView
         this.setTitle( "Login" );
         this.mode = "Register";
     }
+    //#region Login
     submitHandler = e =>
     {
         e.preventDefault();
         const email = document.getElementById( "email" ).value;
         const password = document.getElementById( "password" ).value;
+
         if ( email === "" || password === "" )
         {
             return;
@@ -30,6 +30,7 @@ export default class extends AbstractView
             {
                 "Content-Type": "application/json"
             },
+            // body
             body: JSON.stringify( data )
         };
 
@@ -38,19 +39,20 @@ export default class extends AbstractView
             {
                 if ( res.ok )
                 {
+                    console.log( res );
                     return res.json();
                 }
                 else
                 {
                     return res.json().then( data =>
                     {
-                        throw new Error( data.message );
+                        throw new Error( "Error " + data.message );
                     } );
                 }
             } ).then( data =>
             {
                 //SUCCESSFUL REQUEST & USER IS AUTHENTICATED
-                data.isAuthorized = true;
+                //data.isAuthorized = true;
                 //LOGIN USER
                 //REDIRECT USER TO TODOS PAGE
                 navigateTo( "/todos" );
@@ -60,6 +62,71 @@ export default class extends AbstractView
                 console.log( err.message );
             } );
     };
+    //#endregion
+
+    //#region Register
+    registerHandler = e =>
+    {
+        e.preventDefault();
+        const email = document.getElementById( "email" ).value;
+        const password = document.getElementById( "password" ).value;
+
+        if ( email === "" || password === "" )
+        {
+            return;
+        }
+        const data = { email, password };
+
+        const options =
+        {
+            method: "POST",
+            headers:
+            {
+                "Content-Type": "application/json"
+            },
+            body: JSON.parse( `body: JSON.stringify(
+                {
+                    "title": "[${ email }]",
+                    "parentId": "[co_73e4a8c4-a686-424c-927f-01bebe4af073]"
+                    "props": []
+                },
+                {
+                    "title": "[${ password }]",
+                    "parentId": "[co_d78f6535-e3b8-4fd1-a3ff-c5a0af2ebf16]",
+                    "props": []
+                }
+             )`)
+        };
+
+        fetch( "/db", options )
+            .then( res =>
+            {
+                if ( res.ok )
+                {
+                    console.log( res );
+                    return res.json();
+                }
+                else
+                {
+                    return res.json().then( data =>
+                    {
+                        throw new Error( "Error " + data.message );
+                    } );
+                }
+            } ).then( data =>
+            {
+                //SUCCESSFUL REQUEST & USER IS AUTHENTICATED
+                //data.isAuthorized = true;
+                //LOGIN USER
+                //REDIRECT USER TO TODOS PAGE
+                navigateTo( "/todos" );
+                console.log( data );
+            } ).catch( err =>
+            {
+                console.log( err.message );
+            } );
+    };
+    //#endregion
 
     bindScript ()
     {
@@ -110,6 +177,6 @@ export default class extends AbstractView
             </div>
             `;
     }
-}
+};
 
 // export default Login;

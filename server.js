@@ -13,12 +13,6 @@ app.get( "/*", ( req, res, next ) =>
     res.sendFile( path.resolve( __dirname, "frontend", "index.html" ) );
 } );
 
-app.post( "/login", ( req, res, next ) =>
-{
-    console.log( req.body );
-    res.send( "POST request to the homepage" );
-} );
-
 app.post( "/db", async function ( req, res, next )
 {
     let dbResponse = await getNodes();

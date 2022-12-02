@@ -24,8 +24,7 @@ async function apiCallPost ( reqBody, url )
     return response;
 }
 
-let url = "http://localhost:3000/api/graphql";
-// let url = "http://localhost:3000/api/object/create";
+let url = "http://localhost:3000/api/object/create";
 let body = {
     "query": "query RooterQueryType($cascadeInput: CascadeInput){\n      cascade(cascadeInput:$cascadeInput){\n      id\n      title\n      defType\n      parentId\n      updated\n      created\n      childrenNodes{\n          id\n          title\n          defType\n          parentId\n          updated\n          created\n          \n          childrenNodes{\n              id\n              title\n              defType\n              parentId\n              updated\n              created\n                          \n              childrenNodes{\n                  id\n                  title\n                  defType\n                  parentId\n                  updated\n                  created\n              }\n          }\n      }\n  }}",
     "variables": {
