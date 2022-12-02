@@ -1,4 +1,5 @@
 var express = require("express");
+
 var path = require("path");
 /* var cookieParser = require("cookie-parser"); */
 /* var logger = require("bob"); */
@@ -22,12 +23,22 @@ app.get("/*", (req, res) => {
 });
 
 app.post("/graphql", async function (req, res, next) {
-    console.log('/graphql')
-  let dbResponse = await getNodes();
-  console.log(dbResponse);
-  console.log(response.status);
-  console.log(response.data);
-  res.send(dbResponse);
+  let username = req.body.username;
+  let password = req.body.password;
+  console.log("username :", username);
+  console.log("password: ", password);
+  console.log("/graphql");
+  let dbResponse = await getNodes(req.body.username);
+  let getPassword = await getNodes(req.body.password);
+
+  let bigResp = [dbResponse, getPassword];
+  console.log("get password: ", getPassword);
+  /* console.log(dbResponse);
+  console.log(dbResponse.status);
+  console.log(dbResponse.data); */
+  console.log(JSON.stringify(bigResp[0].data.data.nodes[0].title));
+  console.log(JSON.stringify(bigResp[1].data.data.nodes[0].title));
+  res.send(bigResp);
 });
 
 app.get("/todo", (req, res) => {
@@ -37,53 +48,3 @@ app.get("/todo", (req, res) => {
 app.listen(process.env.PORT || 4090, () =>
   console.log("server is up and running.")
 );
-
-/* 
-async function apiCallPost(reqBody, url) {
-  let response;
-
-  try {
-    response = await axios.post(url, reqBody, {
-      withCredentials: true,
-      credientials: "include",
-      headers: {
-        apikey: "abcdefghijklmnopqrstuvwxyz",
-      },
-    });
-
-    console.log("try apiCallPost ", reqBody);
-  } catch (err) {
-    // Handle Error Here
-    response = err.response;
-    console.log("catch apiCallPost ", reqBody);
-  }
-  return response;
-} */
-
-/* let url = "http://localhost:3000/api/graphql";
-let body = {
-  query:
-    "query RooterQueryType($cascadeInput: CascadeInput){\n      cascade(cascadeInput:$cascadeInput){\n      id\n      title\n      defType\n      parentId\n      updated\n      created\n      childrenNodes{\n          id\n          title\n          defType\n          parentId\n          updated\n          created\n          \n          childrenNodes{\n              id\n              title\n              defType\n              parentId\n              updated\n              created\n                          \n              childrenNodes{\n                  id\n                  title\n                  defType\n                  parentId\n                  updated\n                  created\n              }\n          }\n      }\n  }}",
-  variables: {
-    cascadeInput: {
-      configDef: {
-        id: ["cd_7277ad05-4d6a-4c64-99f5-90b5f89043fc"],
-      },
-      configObj: {
-        id: [
-          "co_3bc766cb-74b8-458a-acf0-e5202291e5cc",
-          "co_4417d751-583e-46c7-b704-b066b2549acf",
-        ],
-      },
-      typeData: {},
-      instanceData: {},
-    },
-  },
-};
-
-async function getNodes() {
-  let response = await apiCallPost(body, url);
-  console.log("resp: " + JSON.stringify(response.data, null, 2));
-}
-
-getNodes(); */

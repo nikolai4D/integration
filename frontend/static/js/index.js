@@ -12,7 +12,7 @@ const getParams = (match) => {
     (result) => result[1]
   );
 
-  console.log(Array.from(match.route.path.matchAll(/:(\w+)/g)));
+  /* console.log(Array.from(match.route.path.matchAll(/:(\w+)/g))); */
 
   return Object.fromEntries(
     keys.map((key, i) => {
@@ -27,7 +27,7 @@ const navigateTo = (url) => {
 };
 
 const router = async () => {
-  console.log(pathToRegex("/todo/:id"));
+  /* console.log(pathToRegex("/todo/:id")); */
   const routes = [
     { path: "/", view: Home },
     { path: "/todo", view: Todo },

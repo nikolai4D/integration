@@ -1,15 +1,18 @@
 const axios = require("axios");
-
+require("dotenv").config();
 const apiCallPost = async (reqBody, url) => {
   let response;
-  let password;
-
+  let username = reqBody.username;
+  let password = reqBody.password;
+  /*  console.log("testing: ", username, password); */
+  let apikey = process.env.API_KEY;
+  console.log("apikey:", apikey);
   try {
     response = await axios.post(url, reqBody, {
       withCredentials: true,
       credentials: "include",
       headers: {
-        apikey: "abcdefghijklmnopqrstuvwxyz",
+        apikey: process.env.API_KEY,
       },
     });
 
@@ -22,24 +25,34 @@ const apiCallPost = async (reqBody, url) => {
 };
 
 let url = "http://localhost:3000/api/graphql";
-let body = {
-  query:
-    "query RooterQueryType($cascadeInput: CascadeInput){\n      cascade(cascadeInput:$cascadeInput){\n      id\n      title\n      defType\n      parentId\n      updated\n      created\n      childrenNodes{\n          id\n          title\n          defType\n          parentId\n          updated\n          created\n          \n          childrenNodes{\n              id\n              title\n              defType\n              parentId\n              updated\n              created\n                          \n              childrenNodes{\n                  id\n                  title\n                  defType\n                  parentId\n                  updated\n                  created\n              }\n          }\n      }\n  }}",
-  variables: {
-    cascadeInput: {
-      configDef: {
-        id: ["cd_6477e5a5-3f48-455b-bbbe-7c2b49711ba9"],
-        /* ${password}, */
-      },
-      configObj: {},
-      typeData: {},
-      instanceData: {},
+let body = (input) => {
+  return {
+    query: `query RooterQueryType($input:QueryInput){
+      nodes(itemInput:$input){
+      id
+      title
+      defType
+      parentId
+      props {
+          key
+          value
+      }
+      propKeys
+      typeDataPropKeys
+      instanceDataPropKeys
+      updated
+      created
+    }
+  }`,
+    variables: {
+      input: { title: input },
     },
-  },
+  };
 };
 
-async function getNodes() {
-  let response = await apiCallPost(body, url);
+async function getNodes(input) {
+  let setBody = body(input);
+  let response = await apiCallPost(setBody, url);
   console.log("test", response.data);
 
   return {
