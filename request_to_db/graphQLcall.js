@@ -4,7 +4,6 @@ const apiCallPost = async (reqBody, url) => {
   let response;
   let username = reqBody.username;
   let password = reqBody.password;
-  /*  console.log("testing: ", username, password); */
   let apikey = process.env.API_KEY;
   console.log("apikey:", apikey);
   try {

@@ -1,3 +1,4 @@
+const { log } = require("console");
 var express = require("express");
 
 var path = require("path");
@@ -33,11 +34,18 @@ app.post("/graphql", async function (req, res, next) {
 
   let bigResp = [dbResponse, getPassword];
   console.log("get password: ", getPassword);
-  /* console.log(dbResponse);
-  console.log(dbResponse.status);
-  console.log(dbResponse.data); */
-  console.log(JSON.stringify(bigResp[0].data.data.nodes[0].title));
-  console.log(JSON.stringify(bigResp[1].data.data.nodes[0].title));
+
+  const user = JSON.stringify(bigResp[0].data.data.nodes[0]?.title)
+  const pass = JSON.stringify(bigResp[1].data.data.nodes[0]?.title)
+
+  if (!user && !pass){
+    console.log('not working');
+  }
+  
+  console.log(user);
+  console.log(pass);
+
+  
   res.send(bigResp);
 });
 

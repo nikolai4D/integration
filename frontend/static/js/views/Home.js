@@ -1,6 +1,7 @@
 import StringToHtml from "../helpers/stringToHtmlEl.js";
 import AbstractView from "./AbstractView.js";
 import router from "../index.js";
+import { navigateTo } from "../index.js";
 
 export default class extends AbstractView {
   constructor() {
@@ -27,7 +28,16 @@ export default class extends AbstractView {
         });
         console.log(username);
         console.log(password);
-        if (!response.ok) {
+        /* Doesn't do anything, yet...
+         if (username && password === undefined) {
+          alert("not ok");
+        }
+         */
+       
+        if (response.ok) {
+          console.log(`Status ${response.status}`);
+          return response.json();
+        } else {
           throw new Error(`HTTP error ${response.status}`);
         }
       } catch (error) {
