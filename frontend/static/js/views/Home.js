@@ -33,7 +33,7 @@ export default class extends AbstractView {
           alert("not ok");
         }
          */
-       
+
         if (response.ok) {
           console.log(`Status ${response.status}`);
           return response.json();
@@ -43,6 +43,7 @@ export default class extends AbstractView {
       } catch (error) {
         console.log(error);
       }
+
       return await response.json();
     }
   };
@@ -54,15 +55,33 @@ export default class extends AbstractView {
       if (response.status !== 200) {
         console.log(response.status);
       } else {
-        console.log(response.status);
-        console.log(response.data);
+        console.log(response[0].status);
+        console.log(response[0].data);
       }
-      console.log(response);
+      console.log("username:", response[0].data.data.nodes[0]?.title);
+      console.log("password:", response[1].data.data.nodes[0]?.title);
 
-      let contechResponse = response.data;
+      console.log('ED:', response)
 
-      console.log("status from contech response: ", contechResponse.status);
-      console.log("data from contech response: ", contechResponse.data);
+      const user = response[0].data.data.nodes[0]?.title;
+      const password = response[1].data.data.nodes[0]?.title;
+
+      if (
+        document.getElementById("email").value === user &&
+        document.getElementById("password").value === 
+        password
+      ) {
+        navigateTo('/todo')
+      } else if(user !== password ||
+      password !== user) {
+        alert('ajabaja')
+      }
+      else {
+        alert("wrong username or password");
+      }
+
+      console.log("status from contech response: ", response.status);
+      console.log("data from contech response: ", response.data);
     });
   };
 

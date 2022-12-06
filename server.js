@@ -6,7 +6,8 @@ var path = require("path");
 /* var logger = require("bob"); */
 
 const app = express();
-const getNodes = require("./request_to_db/graphQLcall");
+const {getNodes} = require("./request_to_db/graphQLcall");
+const {createNodes} = require("./request_to_db/graphQLcall");
 
 /* app.use(logger("dev")); */
 app.use(express.json());
@@ -23,6 +24,21 @@ app.get("/*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "index.html"));
 });
 
+app.post("/create/task", async function (req, res, next) {
+  let task = req.body.task;
+  console.log("req body", req.body);
+  let date = req.body.date;
+  console.log("added task: ", task);
+  let dbResponse = await createNodes(req.body.task);
+  /* let getTask = await createNodes(req.body.task) */
+
+  /*  let createTask = [dbResponse, getTask]; */
+
+  console.log(dbResponse.data);
+
+  res.send(dbResponse);
+});
+
 app.post("/graphql", async function (req, res, next) {
   let username = req.body.username;
   let password = req.body.password;
@@ -35,17 +51,6 @@ app.post("/graphql", async function (req, res, next) {
   let bigResp = [dbResponse, getPassword];
   console.log("get password: ", getPassword);
 
-  const user = JSON.stringify(bigResp[0].data.data.nodes[0]?.title)
-  const pass = JSON.stringify(bigResp[1].data.data.nodes[0]?.title)
-
-  if (!user && !pass){
-    console.log('not working');
-  }
-  
-  console.log(user);
-  console.log(pass);
-
-  
   res.send(bigResp);
 });
 

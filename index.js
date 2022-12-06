@@ -9,9 +9,13 @@ app.get('/', (req,res,next) =>{
     'Express'})
 })
 
-app.post('/graphql',  async (req, res, next) =>{
+/* app.post('/graphql',  async (req, res, next) =>{
     let contechRes = await getNodes()
     res.send(contechRes)
 } )
 
+app.post('/graphql',  async (req, res, next) =>{
+    let contechRes = await getNodes()
+    res.send(contechRes)
+} ) */
 module.exports = app
